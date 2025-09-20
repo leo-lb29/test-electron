@@ -1,14 +1,18 @@
 {
   "name": "mon-app-electron",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.3.0",
+  "description": "Une application Electron avec auto-update",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron --no-sandbox .",
     "dist": "electron-builder"
   },
   "keywords": [],
+  "author": {
+    "name": "leo-lb29",
+    "email": "postyourbot@gmail.com"
+  },
+  "license": "ISC",
   "build": {
     "appId": "com.tonapp.electron",
     "productName": "TonApp",
@@ -31,14 +35,16 @@
       {
         "provider": "github",
         "owner": "leo-lb29",
-        "repo": "TonRepo"
+        "repo": "test-electron"
       }
     ]
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "electron": "^38.1.2",
     "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2",
+    "install": "^0.13.0"
   }
 }

@@ -1,11 +1,12 @@
-const { app, BrowserWindow, Menu, screen } = require('electron');
+const { app, BrowserWindow, Menu } = require("electron");
+const { autoUpdater } = require("electron-updater");
 
-let win;
-let splash;
+let mainWindow;
+let splashWindow;
 
 function createWindow() {
-  // Splash screen
-  splash = new BrowserWindow({
+  // --- Splash screen ---
+  splashWindow = new BrowserWindow({
     width: 400,
     height: 300,
     frame: false,
@@ -13,43 +14,58 @@ function createWindow() {
     transparent: true,
     center: true,
   });
-  splash.loadFile('splash.html'); // page HTML simple avec loader
 
+  splashWindow.loadFile("splash.html");
 
-
-
-  win = new BrowserWindow({
+  // --- Fenêtre principale ---
+  mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
     show: false,
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
     },
-    frame: true,           // mettre false si tu veux sans bordure
-    autoHideMenuBar: true, // cache la barre de menu
+    frame: true, // mettre false si tu veux sans bordure
+    autoHideMenuBar: true,
   });
 
-
-
+  // Pas de menu
   Menu.setApplicationMenu(null);
 
-  win.loadURL('http://localhost:3000'); // charge l'URL de ton app React
+  // Charge ton app React
+  mainWindow.loadURL("https://wagoo.app");
 
-  // Quand la fenêtre principale est prête
-  win.once('ready-to-show', () => {
-    // Garde le splash 3 secondes
+  // Affiche la fenêtre principale après un délai
+  mainWindow.once("ready-to-show", () => {
     setTimeout(() => {
-      if (splash) splash.close();
-    win.maximize(); // maximise la fenêtre
-    win.show();     // affiche
-    }, 5000); // 3000 ms = 3 secondes
+      if (splashWindow) splashWindow.close();
+      mainWindow.maximize();
+      mainWindow.show();
+    }, 3000); // splash visible 3 sec
   });
 }
 
-app.whenReady().then(createWindow);
+// --- Auto-updater ---
+function initAutoUpdater() {
+  autoUpdater.checkForUpdatesAndNotify();
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  autoUpdater.on("update-available", () => {
+    console.log("✅ Mise à jour disponible !");
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    console.log("📦 Mise à jour téléchargée, installation...");
+    autoUpdater.quitAndInstall();
+  });
+}
+
+// --- Cycle de vie de l’app ---
+app.whenReady().then(() => {
+  createWindow();
+  initAutoUpdater();
 });
 
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
+});
