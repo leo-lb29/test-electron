@@ -1,0 +1,44 @@
+{
+  "name": "mon-app-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron --no-sandbox .",
+    "dist": "electron-builder"
+  },
+  "keywords": [],
+  "build": {
+    "appId": "com.tonapp.electron",
+    "productName": "TonApp",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "leo-lb29",
+        "repo": "TonRepo"
+      }
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^38.1.2",
+    "electron-builder": "^26.0.12"
+  }
+}
